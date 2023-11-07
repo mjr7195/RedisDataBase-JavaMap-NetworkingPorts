@@ -8,7 +8,7 @@ public class CSVReader {
     public static void main(String[] args) {
         String pathToCsv = "service-names-port-numbers.csv"; // replace with your CSV file path
         String line;
-        Map<String, String> portDescriptions = new TreeMap<>(); //Sorted
+        Map<Integer, String> portDescriptions = new TreeMap<>(); //Sorted
 
         try (BufferedReader br = new BufferedReader(new FileReader(pathToCsv))) {
 
@@ -18,20 +18,23 @@ public class CSVReader {
                 // Print the content on the console
                 // for (String column : columns) {
                 try {
-                    portDescriptions.put(columns[1], columns[3]);
+                    if (Character.isDigit(columns[1].charAt(0))){
+                        int portIntoInt = Integer.parseInt(columns[1]);
+                        portDescriptions.put(portIntoInt, columns[3]);
+                    }
+
                 }catch (Exception e){
-                    // dont care
+                    // don't care
                 }
-                //}
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NumberFormatException e) {
-            // do nothing
+            System.out.println("letters cannot be parsed into integers");
         }
 
         portDescriptions.forEach((key, value) -> System.out.println(key+ " " + value));
-        System.out.println("program was able to finish");
+
     }
 }
